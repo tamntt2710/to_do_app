@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 class Task{
   String name;
   Color color;
-  DateTime time;
+  String day;
+  String hour;
   String place;
-  Task({required this.name,required this.color,required this.time,required this.place});
+  String level;
+  Task({required this.name,required this.color,required this.day,required this.hour,required this.level,
+  required this.place});
 }

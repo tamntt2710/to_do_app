@@ -12,13 +12,31 @@ import '../app_bar_custom.dart';
 import '../list_sort_button.dart';
 import 'color_item.dart';
 class EditTaskScreen extends StatelessWidget {
-  EditTaskScreen({Key? key}) : super(key: key);
+  final String title;
+  final Color color;
+  final String day;
+  final String hour;
+  final String place;
+  final String level;
+  final ValueChanged<Color> onChangeColor;
+  final ValueChanged<String> onChangedTitle;
+  final VoidCallback onSaveTodo;
+  EditTaskScreen({
+    Key? key,
+    this.title = '',
+    this.color = Colors.white,
+    this.day = '',
+    this.hour = '',
+    this.level = '',
+    this.place = '',
+    required this.onChangeColor,
+    required this.onChangedTitle,
+    required this.onSaveTodo}) :
+        super(key:
+  key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBarCustom(page : 2),
-      body: SingleChildScrollView(
-        child: Container(
+    return Container(
           padding: EdgeInsets.only(left:15.w,top:20.h,right: 15.w),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -27,40 +45,10 @@ class EditTaskScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Task Name",style:editText),
-              TextField(
-                style: inputText,
-                decoration: InputDecoration(
-                    border: UnderlineInputBorder(
-                        borderSide: new BorderSide(
-                            color: Color(0xFFEAEAEA)
-                        )
-                    ),
-                    hintText: 'Enter your task name',
-                ),
-              ),
+              buildTitle(),
               SizedBox(height: 20.h,),
               Text("Color",style: editText,),
-              Container(
-                margin: EdgeInsets.only(top:20.h,bottom: 10.h),
-                height: 35.h,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: Provider.of<BackGroundColor>(context).listColors.length,
-                    itemBuilder: (context, index) {
-                      return ColorItem(
-                        color: Provider.of<BackGroundColor>(context,
-                            listen:false).listColors[index],
-                        selected:  Provider.of<BackGroundColor>(context,
-                            listen:false).selectedColor == index ? true:false,
-                        press: () {
-                          Provider.of<BackGroundColor>(context,
-                              listen:false).chooseColor(index);
-                        },
-                        );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        SizedBox(width: 15.w,)),
-              ),
+              buldColor(context),
               Divider(
                 color: Color(0xFFEAEAEA),
               thickness: 2.0,
@@ -125,61 +113,37 @@ class EditTaskScreen extends StatelessWidget {
                 color: Color(0xFFEAEAEA),
                 thickness: 2.0,
               ),
-          Container(
-            margin: EdgeInsets.only(right: 10.w,bottom: 10.h, top: 20.h),
-            height: 40.h,
-            child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: Provider.of<LevelOfEvent>(context).levels.length,
-                itemBuilder: (context, index) {
-                  return SortButtonList(
-                    text:
-                    Provider.of<LevelOfEvent>(context,
-                        listen:false).levels[index],
-                    isSeclected:
-                    Provider
-                        .of<LevelOfEvent>(context,
-                        listen:false).selected == index ? true : false,
-                    press: () {
+            Container(
+              margin: EdgeInsets.only(right: 10.w,bottom: 10.h, top: 20.h),
+              height: 40.h,
+              child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: Provider.of<LevelOfEvent>(context).levels.length,
+                  itemBuilder: (context, index) {
+                    return SortButtonList(
+                      text:
                       Provider.of<LevelOfEvent>(context,
-                          listen:false).chooseLevel(index);
-                    },
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) =>
+                          listen:false).levels[index],
+                      isSeclected:
+                      Provider
+                          .of<LevelOfEvent>(context,
+                          listen:false).selected == index ? true : false,
+                      press: () {
+                        Provider.of<LevelOfEvent>(context,
+                            listen:false).chooseLevel(index);
+                      },
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
                     SizedBox(width: 15.w,)),
           ),
               Divider(
                 color: Color(0xFFEAEAEA),
                 thickness: 2.0,
               ),
-              Container(
-                padding: EdgeInsets.only(top: 10.h,bottom: 10.h),
-                height:80.h,
-                child: ElevatedButton(onPressed: (){},
-                    style: ButtonStyle(
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        backgroundColor: MaterialStateProperty.all<Color>
-                          (Colors.black),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                                side: BorderSide(color: Colors.black)
-                            )
-                        )
-                    ),
-
-                    child: Center(
-                      child: Text("Save Task",style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold)),
-                    )),
-              )
+              buildButton(),
             ],
-          ),
-        ),
-      ),
-    );
+          ));
   }
   _showSingleChoiceDialog(BuildContext context)
   => showDialog(
@@ -232,6 +196,65 @@ class EditTaskScreen extends StatelessWidget {
     );
       _timePicker.chooseDate(picked!);
   }
+
+  Widget buildTitle() => TextField(
+    maxLines: 1,
+    style: inputText,
+    decoration: InputDecoration(
+      border: UnderlineInputBorder(
+          borderSide: new BorderSide(
+              color: Color(0xFFEAEAEA)
+          )
+      ),
+      hintText: 'Enter your task name',
+    ),
+    onChanged: onChangedTitle,
+  );
+
+  Widget buildButton() => Container(
+    padding: EdgeInsets.only(top: 10.h,bottom: 10.h),
+    height:80.h,
+    child: ElevatedButton(
+        style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            backgroundColor: MaterialStateProperty.all<Color>
+              (Colors.black),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    side: BorderSide(color: Colors.black)
+                )
+            )
+        ),
+        onPressed: onSaveTodo,
+        child: Center(
+          child: Text("Save Task",style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold)),
+        )),
+  );
+
+  buldColor(BuildContext context) => Container(
+    margin: EdgeInsets.only(top:20.h,bottom: 10.h),
+    height: 35.h,
+    child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: Provider.of<BackGroundColor>(context).listColors.length,
+        itemBuilder: (context, index) {
+          return ColorItem(
+            color: Provider.of<BackGroundColor>(context,
+                listen:false).listColors[index],
+            selected:  Provider.of<BackGroundColor>(context,
+                listen:false).selectedColor == index ? true:false,
+            press: () {
+              Provider.of<BackGroundColor>(context,
+                  listen:false).chooseColor(index);
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) =>
+            SizedBox(width: 15.w,)),
+  );
 
 
 }
