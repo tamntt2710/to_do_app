@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'component/Item/text_item.dart';
 import 'component/app_bar_custom.dart';
 import 'component/data_picker/time_picker.dart';
 import 'component/edit_task_screen/edit_task_screen.dart';
 import 'component/edit_task_screen/item_event_view.dart';
-import 'component/list_sort_button.dart';
 import 'component/search_item.dart';
 import 'component/time_sort.dart';
 import 'model/colors.dart';
 import 'model/level_of_event.dart';
 import 'model/place.dart';
 import 'model/time_of_task.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -86,7 +83,6 @@ class MyHomePage extends StatelessWidget {
           );
         },
         child: Center(child: Icon(Icons.add,size: 30,)),
-
               backgroundColor: Colors.black,
       ),
     );

@@ -75,7 +75,7 @@ class EditTaskScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                        Provider.of<DatePickerDState>(context,listen: false)
+                        Provider.of<DatePickerDState>(context)
                             .dateSelect.toString(),
                       style: textTime
                     ),
@@ -88,7 +88,7 @@ class EditTaskScreen extends StatelessWidget {
                             listen:false).selectedDate);
                         _selectDate(context);
                       },
-                      child: Icon(Icons.assignment_sharp,color: Colors
+                      child: Icon(Icons.fact_check_outlined,color: Colors
                           .black,),
                     ),
                   ],
@@ -226,7 +226,7 @@ class EditTaskScreen extends StatelessWidget {
            // primarySwatch: Colors.black,
             accentColor: Color(0xFFFFA3C2),
           ),
-          child: child,
+          child: child as Widget,
         );
       }
     );

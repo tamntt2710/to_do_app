@@ -67,8 +67,8 @@ class ItemEvent extends StatelessWidget {
                 ),),
                 Row(
                   children: [
-                    Icon(Icons.assignment_sharp,color: Colors
-                        .black54,),
+                    Icon(Icons.fact_check_outlined,color: Colors
+                        .black,),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Text("12 Oct 2021", style: TextStyle(
@@ -84,7 +84,7 @@ class ItemEvent extends StatelessWidget {
                     Row(
                       children: [
                         Icon(Icons.access_time,color: Colors
-                            .black54,),
+                            .black,),
                         Padding(
                           padding: EdgeInsets.only(left : 15.0),
                           child: Text("7:30", style: TextStyle(
