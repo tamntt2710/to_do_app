@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'package:to_do_app/component/Item/text_item.dart';
-import 'package:to_do_app/model/colors.dart';
-import 'package:to_do_app/model/level_of_event.dart';
-import 'package:to_do_app/model/place.dart';
-import 'edit_task_screen.dart';
+import 'package:to_do_app/model/task.dart';
 class ItemEvent extends StatelessWidget {
-  const ItemEvent({Key? key}) : super(key: key);
+  Task task;
+  ItemEvent({Key? key,required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +14,7 @@ class ItemEvent extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 20.w,top: 20.h,right: 15.w),
         decoration: BoxDecoration(
-            color: Provider.of<BackGroundColor>(context,
-                listen:false).itemColor,
+            color: task.color,
             borderRadius: BorderRadius.all(Radius.circular(16))
         ),
         child: Column(
@@ -31,9 +27,8 @@ class ItemEvent extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      TextItem(text: Provider.of<Place>(context).currentPlace,),
-                      TextItem(text: Provider.of<LevelOfEvent>(context,
-                          listen:false).levelChoosen),
+                      TextItem(text: task.place,),
+                      TextItem(text: task.level),
                     ],
                   ),
                   Container(
@@ -44,11 +39,13 @@ class ItemEvent extends StatelessWidget {
                         color: Colors.black
                     ),
                     child: GestureDetector(
-                        onTap:(){ Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EditTaskScreen()),
-                        );},
+                        onTap:(){
+                        //   Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //       builder: (context) => EditTaskScreen()),
+                        // );
+                        },
                         child: Center(
                             child: Icon(Icons.edit,color: Colors
                                 .white,))),
@@ -61,7 +58,7 @@ class ItemEvent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Do my homework",style: TextStyle(
+                Text(task.name,style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w500
                 ),),
@@ -71,7 +68,7 @@ class ItemEvent extends StatelessWidget {
                         .black,),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
-                      child: Text("12 Oct 2021", style: TextStyle(
+                      child: Text(task.day, style: TextStyle(
                           color: Colors.black,
                           fontSize: 16
                       )),
@@ -87,7 +84,7 @@ class ItemEvent extends StatelessWidget {
                             .black,),
                         Padding(
                           padding: EdgeInsets.only(left : 15.0),
-                          child: Text("7:30", style: TextStyle(
+                          child: Text(task.hour, style: TextStyle(
                               color: Colors.black,
                               fontSize: 16
                           )),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:to_do_app/model/TaskManager.dart';
+import 'common/common.dart';
 import 'component/app_bar_custom.dart';
 import 'component/data_picker/time_picker.dart';
 import 'component/edit_task_screen/edit_task_screen.dart';
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-        create: (context)=>ListItemOfTask() ,
+          create: (context)=>ListItemOfTask() ,
         ),
         ChangeNotifierProvider(
           create: (context)=> BackGroundColor() ,
@@ -36,6 +38,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context)=> DatePickerDState() ,
+        ),
+        ChangeNotifierProvider(
+          create: (context)=> TodosProvider() ,
         ),
       ],
       child:
@@ -60,6 +65,8 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<TodosProvider>(context);
+    final todos = provider.taskList;
     return Scaffold(
       appBar: AppBarCustom(page: 1),
       body: Container(
@@ -70,7 +77,26 @@ class MyHomePage extends StatelessWidget {
           children: [
             SearchItem(),
             SortTime(),
-            ItemEvent()
+           todos.isEmpty ?
+               Text(
+                 "No task",
+                 style: kTextStyle,
+               )
+               :
+               //Text(todos.length.toString()),
+           Expanded(
+             child: SizedBox(
+               height: 350,
+               child: ListView.separated(
+                      physics: BouncingScrollPhysics(),
+                      itemBuilder: (context,index){
+                       return ItemEvent(task: todos[index],);
+                        },
+                     separatorBuilder: (context,index) =>Container(height: 0
+                         .h,),
+                     itemCount: todos.length),
+             ),
+           )
           ],
         ),
       ),
@@ -79,8 +105,8 @@ class MyHomePage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => EditTaskScreen()),
-          );
+                builder: (context) => EditTaskWidget(),
+          ));
         },
         child: Center(child: Icon(Icons.add,size: 30,)),
               backgroundColor: Colors.black,
