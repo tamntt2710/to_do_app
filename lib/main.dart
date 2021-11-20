@@ -65,8 +65,10 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int select = Provider.of<ListItemOfTask>(context).selectedItem;
     final provider = Provider.of<TodosProvider>(context);
     final todos = provider.taskList;
+    final todos_completed = provider.TaskCompleted;
     return Scaffold(
       appBar: AppBarCustom(page: 1),
       body: Container(
@@ -78,23 +80,35 @@ class MyHomePage extends StatelessWidget {
             SearchItem(),
             SortTime(),
            todos.isEmpty ?
-               Text(
-                 "No task",
-                 style: kTextStyle,
-               )
-               :
-               //Text(todos.length.toString()),
+           Container(
+             height: 400.h,
+             child: Center(
+               child: Icon(Icons.fact_check_outlined,color: Colors
+                   .black54,size: 100
+                 ,),
+             ),
+           ) : //Text(todos.length.toString()),
            Expanded(
              child: SizedBox(
                height: 350,
-               child: ListView.separated(
+               child:
+               select == 0 ?
+               ListView.separated(
                       physics: BouncingScrollPhysics(),
                       itemBuilder: (context,index){
                        return ItemEvent(task: todos[index],);
                         },
                      separatorBuilder: (context,index) =>Container(height: 0
                          .h,),
-                     itemCount: todos.length),
+                     itemCount: todos.length)
+               : ListView.separated(
+                       physics: BouncingScrollPhysics(),
+                       itemBuilder: (context,index){
+                         return ItemEvent(task: todos_completed[index],);
+                       },
+                       separatorBuilder: (context,index) =>Container(height: 0
+                           .h,),
+                       itemCount: todos_completed.length),
              ),
            )
           ],

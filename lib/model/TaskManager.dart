@@ -31,4 +31,11 @@ class TodosProvider extends ChangeNotifier {
     listOfTask.remove(task);
     notifyListeners();
   }
+  List<Task> get TaskCompleted => listOfTask.where((task) => task.isDOne ==
+      true).toList();
+  bool toggleTaskStatus(Task task){
+    task.isDOne = !task.isDOne;
+    notifyListeners();
+    return task.isDOne;
+  }
 }

@@ -252,10 +252,10 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                 .of<LevelOfEvent>(context,
                 listen:false).selected == index ? true : false,
             press: () {
-              level = Provider.of<LevelOfEvent>(context,
-                  listen:false).levelChoosen;
               Provider.of<LevelOfEvent>(context,
                   listen:false).chooseLevel(index);
+              level = Provider.of<LevelOfEvent>(context,
+                  listen:false).levelChoosen;
             },
           );
         },

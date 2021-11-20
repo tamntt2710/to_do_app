@@ -78,7 +78,9 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
                     selected: _singleNotifier.currentPlace == e,
                     onChanged: (value){
                       _singleNotifier.updatePlace(value.toString());
+                      task.place = Provider.of<Place>(context,listen: false).currentPlace;
                       Navigator.of(context).pop();
+                      print(task.place.toString());
                     },
                   )).toList(),
                 )
@@ -193,6 +195,7 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
             task.day = Provider.of<DatePickerDState>(context,listen: false)
                 .dateSelect
                 .toString();
+            print(task.day.toString());
           },
           child: Icon(Icons.fact_check_outlined,color: Colors
               .black,),
@@ -212,7 +215,6 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
         ),
         GestureDetector(
           onTap: (){
-            task.place = Provider.of<Place>(context,listen: false).currentPlace;
             return _showSingleChoiceDialog(context);
           },
           child: Icon(Icons.add_location_alt_rounded,color: Colors
@@ -234,14 +236,14 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
             Provider.of<LevelOfEvent>(context,
                 listen:false).levels[index],
             isSeclected:
-            Provider
-                .of<LevelOfEvent>(context,
+            Provider.of<LevelOfEvent>(context,
                 listen:false).selected == index ? true : false,
             press: () {
-              task.level = Provider.of<LevelOfEvent>(context,
-                  listen:false).levelChoosen;
               Provider.of<LevelOfEvent>(context,
                   listen:false).chooseLevel(index);
+              task.level = Provider.of<LevelOfEvent>(context,listen : false)
+                  .levelChoosen;
+              print(task.level.toString());
             },
           );
         },
@@ -252,6 +254,7 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
   void addTask() {
     Provider.of<TodosProvider>(context, listen: false).addTodo(task);
     Navigator.of(context).pop();
+    print(task.toString());
   }
   void onChangedTitle(String value) => setState(() =>task.name = value);
 }

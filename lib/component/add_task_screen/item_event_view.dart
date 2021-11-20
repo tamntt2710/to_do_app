@@ -93,7 +93,7 @@ class ItemEvent extends StatelessWidget {
                   ],
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       children: [
@@ -108,20 +108,8 @@ class ItemEvent extends StatelessWidget {
                         ),
                       ],
                     ),
-
-                    Container(
-                      height: 30.h,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: Colors.black,
-                              width: 2.0
-                          )
-                      ),
-                      child: Center(
-                        child: Icon(Icons.done,),
-                      ),
-                    )
+                    SizedBox(width : 200.w),
+                    buildTodo(context)
                   ],
                 ),
               ],
@@ -138,4 +126,29 @@ class ItemEvent extends StatelessWidget {
     provider.removeTodo(task);
     Utils.showSnackBar(context, 'Deleted the task');
   }
+  buildTodo(context) => GestureDetector(
+    onTap: () => editTodo(context,task),
+    child: Container(
+      height: 30.h,
+      child: Checkbox(
+        activeColor: Theme.of(context).primaryColor,
+        checkColor: Colors.white,
+        value: task.isDOne,
+        onChanged: (_) {
+          final provider =
+          Provider.of<TodosProvider>(context, listen: false);
+          final isDone = provider.toggleTaskStatus(task);
+          Utils.showSnackBar(
+            context,
+            isDone ? 'Task completed' : 'Task marked incomplete',
+          );
+        },
+      )
+    ),
+  );
+  void editTodo(BuildContext context, Task todo) => Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => EditTaskWidget(task: todo,),
+    ),
+  );
 }

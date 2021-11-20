@@ -6,7 +6,8 @@ class Task{
   String hour = "9:00";
   String place;
   String level;
-  bool isDOne = false;
-  Task({required this.name,required this.color,required this.day,required this.level,
-  required this.place});
+  bool isDOne;
+  Task({required this.name,required this.color,required this.day,required
+  this.level,
+  required this.place,this.isDOne = false});
 }

@@ -5,7 +5,7 @@ import 'package:to_do_app/model/time_of_task.dart';
 
 import 'list_sort_button.dart';
 class SortTime extends StatelessWidget {
-  const SortTime({Key? key}) : super(key: key);
+  SortTime({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +29,6 @@ class SortTime extends StatelessWidget {
                     listen:false).goToItem(index);
                 print(Provider.of<ListItemOfTask>(context,
                     listen:false).listTime[index]);
-                print(Provider
-                    .of<ListItemOfTask>(context,
-                    listen:false).selectedItem);
               },
             );
           },
