@@ -1,28 +1,40 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/common/common.dart';
+import 'package:to_do_app/component/add_task_screen/color_item.dart';
 import 'package:to_do_app/component/data_picker/time_picker.dart';
 import 'package:to_do_app/model/TaskManager.dart';
 import 'package:to_do_app/model/colors.dart';
 import 'package:to_do_app/model/level_of_event.dart';
 import 'package:to_do_app/model/place.dart';
 import 'package:to_do_app/model/task.dart';
+
 import '../app_bar_custom.dart';
 import '../list_sort_button.dart';
-import 'color_item.dart';
 class EditTaskWidget extends StatefulWidget {
-  const EditTaskWidget({Key? key}) : super(key: key);
+  final Task task;
+  const EditTaskWidget({Key? key,required this.task}) : super(key: key);
   @override
   _EditTaskWidgetState createState() => _EditTaskWidgetState();
 }
-class _EditTaskWidgetState extends State<EditTaskWidget> {
-  Task task = Task(day: '27/10/2021',
-    name: 'Happy birthday',
-    place: 'Home', level: 'Important', color: Color(0xFFFFA3C2),);
-  final _formKey = GlobalKey<FormState>();
 
+class _EditTaskWidgetState extends State<EditTaskWidget> {
+  final _formKey = GlobalKey<FormState>();
+  late String name;
+  late Color color;
+  late String day;
+  late String place;
+  late String level;
+  @override
+  void initState() {
+    super.initState();
+    name = widget.task.name;
+    color = widget.task.color;
+    day = widget.task.day;
+    place = widget.task.place;
+    level = widget.task.level;
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,6 +90,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                     selected: _singleNotifier.currentPlace == e,
                     onChanged: (value){
                       _singleNotifier.updatePlace(value.toString());
+                      place = _singleNotifier.currentPlace;
                       Navigator.of(context).pop();
                     },
                   )).toList(),
@@ -108,6 +121,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
         }
     );
     _timePicker.chooseDate(picked!);
+    day = _timePicker.dateSelect.toString();
   }
 
   Widget buildTitle() => TextField(
@@ -142,7 +156,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                 )
             )
         ),
-        onPressed: addTask,
+        onPressed: updateTask,
         child: Center(
           child: Text("Save Task",style: TextStyle(
               fontSize: 20,
@@ -165,7 +179,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
             press: () {
               Provider.of<BackGroundColor>(context,
                   listen:false).chooseColor(index);
-              task.color = Provider.of<BackGroundColor>(context,
+              color = Provider.of<BackGroundColor>(context,
                   listen:false).itemColor;
             },
           );
@@ -190,7 +204,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                 listen:false).chooseDate(Provider.of<DatePickerDState>(context,
                 listen:false).selectedDate);
             _selectDate(context);
-            task.day = Provider.of<DatePickerDState>(context,listen: false)
+            day = Provider.of<DatePickerDState>(context,listen: false)
                 .dateSelect
                 .toString();
           },
@@ -212,7 +226,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
         ),
         GestureDetector(
           onTap: (){
-            task.place = Provider.of<Place>(context,listen: false).currentPlace;
+           place = Provider.of<Place>(context,listen: false).currentPlace;
             return _showSingleChoiceDialog(context);
           },
           child: Icon(Icons.add_location_alt_rounded,color: Colors
@@ -238,7 +252,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
                 .of<LevelOfEvent>(context,
                 listen:false).selected == index ? true : false,
             press: () {
-              task.level = Provider.of<LevelOfEvent>(context,
+              level = Provider.of<LevelOfEvent>(context,
                   listen:false).levelChoosen;
               Provider.of<LevelOfEvent>(context,
                   listen:false).chooseLevel(index);
@@ -249,12 +263,11 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
             SizedBox(width: 15.w,)),
   );
 
-  void addTask() {
-    Provider.of<TodosProvider>(context, listen: false).addTodo(task);
+  void updateTask() {
+    Provider.of<TodosProvider>(context, listen: false).updateTodo(widget.task,
+        name,
+        color,day,place,level);
     Navigator.of(context).pop();
   }
-
-  void onChangedTitle(String value) => setState(() =>task.name = value);
+  void onChangedTitle(String value) => setState(() => name = value);
 }
-
-

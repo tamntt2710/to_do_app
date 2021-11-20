@@ -3,10 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:to_do_app/model/TaskManager.dart';
 import 'common/common.dart';
+import 'component/add_task_screen/add_task_screen.dart';
+import 'component/add_task_screen/item_event_view.dart';
 import 'component/app_bar_custom.dart';
 import 'component/data_picker/time_picker.dart';
-import 'component/edit_task_screen/edit_task_screen.dart';
-import 'component/edit_task_screen/item_event_view.dart';
 import 'component/search_item.dart';
 import 'component/time_sort.dart';
 import 'model/colors.dart';
@@ -105,7 +105,7 @@ class MyHomePage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => EditTaskWidget(),
+                builder: (context) => AddTaskWidget(),
           ));
         },
         child: Center(child: Icon(Icons.add,size: 30,)),

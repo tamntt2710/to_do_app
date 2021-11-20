@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:to_do_app/component/Item/text_item.dart';
+import 'package:to_do_app/component/edit_task_screen/edit_screen.dart';
+import 'package:to_do_app/model/TaskManager.dart';
 import 'package:to_do_app/model/task.dart';
+
+import '../../utils.dart';
 class ItemEvent extends StatelessWidget {
   Task task;
   ItemEvent({Key? key,required this.task}) : super(key: key);
@@ -40,11 +45,11 @@ class ItemEvent extends StatelessWidget {
                     ),
                     child: GestureDetector(
                         onTap:(){
-                        //   Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => EditTaskScreen()),
-                        // );
+                          Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => EditTaskWidget(task: task,)),
+                        );
                         },
                         child: Center(
                             child: Icon(Icons.edit,color: Colors
@@ -58,10 +63,22 @@ class ItemEvent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(task.name,style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500
-                ),),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(task.name,style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w500
+                    ),),
+                    GestureDetector(
+                        onTap: ()
+                       => deleteTask(context,task),
+                        child: Center(
+                            child: Icon(Icons.delete,color: Colors
+                                .white,size: 25,)))
+                  ],
+
+                ),
                 Row(
                   children: [
                     Icon(Icons.fact_check_outlined,color: Colors
@@ -115,5 +132,10 @@ class ItemEvent extends StatelessWidget {
 
       ),
     );
+  }
+  deleteTask(BuildContext context, Task task) {
+    final provider = Provider.of<TodosProvider>(context, listen: false);
+    provider.removeTodo(task);
+    Utils.showSnackBar(context, 'Deleted the task');
   }
 }

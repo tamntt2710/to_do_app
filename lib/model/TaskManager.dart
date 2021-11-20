@@ -18,4 +18,17 @@ class TodosProvider extends ChangeNotifier {
     listOfTask.add(task);
     notifyListeners();
   }
+  void updateTodo(Task task,String name, Color color, String date, String
+  place, String level){
+    task.name = name;
+    task.color = color;
+    task.day = date;
+    task.place = place;
+    task.level = level;
+    notifyListeners();
+  }
+  void removeTodo(Task task){
+    listOfTask.remove(task);
+    notifyListeners();
+  }
 }
