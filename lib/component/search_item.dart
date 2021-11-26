@@ -21,27 +21,27 @@ class _SearchItemState extends State<SearchItem> {
               children: [
                 Text("Welcome Back!",style:
                 TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     color: Colors.black87
                 ),),
                 SizedBox(height: 8.h,),
                 Text("Here's Update Today",style: TextStyle(
-                    fontSize: 25,
+                    fontSize: 23,
                     color: Colors.black,
                     fontWeight: FontWeight.w500
                 ),)
               ],
             ),
             Container(
-                height: 50.h,
-                width: 50.w,
+                height: 40.h,
+                width: 40.w,
                 alignment: Alignment.centerRight,
                 decoration: BoxDecoration(
                     color: Colors.black,
                     shape: BoxShape.circle
                 ),
-                child: Center(child: Icon(Icons.search,size: 30,color:
-                Colors.white70,))
+                child: Center(child: Icon(Icons.search,size: 20,color:
+                Colors.white,))
             )
           ],
         )

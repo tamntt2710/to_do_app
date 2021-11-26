@@ -5,7 +5,6 @@ import 'package:to_do_app/component/Item/text_item.dart';
 import 'package:to_do_app/component/edit_task_screen/edit_screen.dart';
 import 'package:to_do_app/model/TaskManager.dart';
 import 'package:to_do_app/model/task.dart';
-
 import '../../utils.dart';
 class ItemEvent extends StatelessWidget {
   Task task;
@@ -37,8 +36,8 @@ class ItemEvent extends StatelessWidget {
                     ],
                   ),
                   Container(
-                    height: 30.h,
-                    width: 30.h,
+                    height: 25.h,
+                    width: 25.h,
                     alignment: Alignment.centerRight,
                     decoration: BoxDecoration(
                         color: Colors.black
@@ -53,7 +52,7 @@ class ItemEvent extends StatelessWidget {
                         },
                         child: Center(
                             child: Icon(Icons.edit,color: Colors
-                                .white,))),
+                                .white,size: 14,))),
                   )
 
                 ],
@@ -67,7 +66,7 @@ class ItemEvent extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(task.name,style: TextStyle(
-                        fontSize: 25,
+                        fontSize: 23,
                         fontWeight: FontWeight.w500
                     ),),
                     GestureDetector(
@@ -75,7 +74,7 @@ class ItemEvent extends StatelessWidget {
                        => deleteTask(context,task),
                         child: Center(
                             child: Icon(Icons.delete,color: Colors
-                                .white,size: 25,)))
+                                .white,size: 23,)))
                   ],
 
                 ),
@@ -129,21 +128,21 @@ class ItemEvent extends StatelessWidget {
   buildTodo(context) => GestureDetector(
     onTap: () => editTodo(context,task),
     child: Container(
-      height: 30.h,
-      child: Checkbox(
-        activeColor: Theme.of(context).primaryColor,
-        checkColor: Colors.white,
-        value: task.isDOne,
-        onChanged: (_) {
-          final provider =
-          Provider.of<TodosProvider>(context, listen: false);
-          final isDone = provider.toggleTaskStatus(task);
-          Utils.showSnackBar(
-            context,
-            isDone ? 'Task completed' : 'Task marked incomplete',
-          );
-        },
-      )
+        height: 30.h,
+        child: Checkbox(
+          activeColor: task.color,
+          checkColor: Colors.white,
+          value: task.isDOne,
+          onChanged: (_) {
+            final provider =
+            Provider.of<TodosProvider>(context, listen: false);
+            final isDone = provider.toggleTaskStatus(task);
+            Utils.showSnackBar(
+              context,
+              isDone ? 'Task completed' : 'Task marked incomplete',
+            );
+          },
+        )
     ),
   );
   void editTodo(BuildContext context, Task todo) => Navigator.of(context).push(

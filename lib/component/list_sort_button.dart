@@ -25,12 +25,12 @@ class SortButtonList extends StatelessWidget {
         child: Center(
           child: Text(text,style: isSeclected == true ?
           TextStyle(
-              color: Colors.white70,
-              fontSize: 18
+              color: Colors.white,
+              fontSize: 16
           )
               :TextStyle(
             color: Colors.black,
-              fontSize: 18
+              fontSize: 16
           )
             ,),
         ),

@@ -7,6 +7,9 @@ import 'component/add_task_screen/add_task_screen.dart';
 import 'component/add_task_screen/item_event_view.dart';
 import 'component/app_bar_custom.dart';
 import 'component/data_picker/time_picker.dart';
+import 'component/edit_task_screen/completed_list_widget.dart';
+import 'component/edit_task_screen/today_list_widget.dart';
+import 'component/edit_task_screen/upcomming_list_widget.dart';
 import 'component/search_item.dart';
 import 'component/time_sort.dart';
 import 'model/colors.dart';
@@ -22,6 +25,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -65,10 +69,12 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tabs = [
+      TodayListWidget(),
+      UpcommingListWidget(),
+      CompletedWidget()
+    ];
     int select = Provider.of<ListItemOfTask>(context).selectedItem;
-    final provider = Provider.of<TodosProvider>(context);
-    final todos = provider.taskList;
-    final todos_completed = provider.TaskCompleted;
     return Scaffold(
       appBar: AppBarCustom(page: 1),
       body: Container(
@@ -79,52 +85,27 @@ class MyHomePage extends StatelessWidget {
           children: [
             SearchItem(),
             SortTime(),
-           todos.isEmpty ?
-           Container(
-             height: 400.h,
-             child: Center(
-               child: Icon(Icons.fact_check_outlined,color: Colors
-                   .black54,size: 100
-                 ,),
-             ),
-           ) : //Text(todos.length.toString()),
-           Expanded(
-             child: SizedBox(
-               height: 350,
-               child:
-               select == 0 ?
-               ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      itemBuilder: (context,index){
-                       return ItemEvent(task: todos[index],);
-                        },
-                     separatorBuilder: (context,index) =>Container(height: 0
-                         .h,),
-                     itemCount: todos.length)
-               : ListView.separated(
-                       physics: BouncingScrollPhysics(),
-                       itemBuilder: (context,index){
-                         return ItemEvent(task: todos_completed[index],);
-                       },
-                       separatorBuilder: (context,index) =>Container(height: 0
-                           .h,),
-                       itemCount: todos_completed.length),
-             ),
-           )
+            tabs[select],
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton:  FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
-            context,
-            MaterialPageRoute(
+              context,
+              MaterialPageRoute(
                 builder: (context) => AddTaskWidget(),
-          ));
+              ));
         },
-        child: Center(child: Icon(Icons.add,size: 30,)),
-              backgroundColor: Colors.black,
+
+        label: const Text('Add Task',style: TextStyle(
+            color: Colors.white,
+            fontSize: 14
+        )),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.black,
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
