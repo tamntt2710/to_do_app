@@ -14,7 +14,7 @@ import '../app_bar_custom.dart';
 import '../list_sort_button.dart';
 class EditTaskWidget extends StatefulWidget {
   final Task task;
-  const EditTaskWidget({Key? key,required this.task}) : super(key: key);
+ EditTaskWidget({Key? key,required this.task}) : super(key: key);
   @override
   _EditTaskWidgetState createState() => _EditTaskWidgetState();
 }
@@ -120,25 +120,30 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
           );
         }
     );
-    _timePicker.chooseDate(picked!);
-    day = _timePicker.dateSelect.toString();
+    setState((){
+      _timePicker.chooseDate(picked!);
+      day = _timePicker.dateSelect.toString();
+    });
   }
 
-  Widget buildTitle() => TextField(
+  Widget buildTitle() => Form(
     key: _formKey,
-    maxLines: 1,
-    style: inputText,
-    decoration: InputDecoration(
-      border: UnderlineInputBorder(
-          borderSide: new BorderSide(
-              color: Color(0xFFEAEAEA)
-          )
+    child: TextFormField(
+      initialValue: name,
+      maxLines: 1,
+      style: inputText,
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(
+            borderSide: new BorderSide(
+                color: Color(0xFFEAEAEA)
+            )
+        ),
+        hintText: 'Enter your task name',
+
       ),
-      hintText: 'Enter your task name',
+      onChanged: onChangedTitle,
 
     ),
-    onChanged: onChangedTitle,
-
   );
 
   Widget buildButton(context) => Container(
@@ -194,19 +199,20 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-            Provider.of<DatePickerDState>(context)
-                .dateSelect.toString(),
-            style: textTime
+        // Provider.of<DatePickerDState>(context)
+        //       .dateSelect.toString(),
+          day,
+          style: textTime,
         ),
         GestureDetector(
           onTap: (){
-            Provider.of<DatePickerDState>(context,
-                listen:false).chooseDate(Provider.of<DatePickerDState>(context,
-                listen:false).selectedDate);
             _selectDate(context);
-            day = Provider.of<DatePickerDState>(context,listen: false)
-                .dateSelect
-                .toString();
+            setState((){
+              day = Provider.of<DatePickerDState>(context,listen: false)
+                  .dateSelect
+                  .toString();
+              print(day);
+            });
           },
           child: Icon(Icons.fact_check_outlined,color: Colors
               .black,),
@@ -226,6 +232,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
         ),
         GestureDetector(
           onTap: (){
+            place = place;
            place = Provider.of<Place>(context,listen: false).currentPlace;
             return _showSingleChoiceDialog(context);
           },
@@ -268,6 +275,7 @@ class _EditTaskWidgetState extends State<EditTaskWidget> {
         name,
         color,day,place,level);
     Navigator.of(context).pop();
+    print(name + place + place + day + level);
   }
   void onChangedTitle(String value) => setState(() => name = value);
 }

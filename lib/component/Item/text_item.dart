@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class TextItem extends StatelessWidget {
-  String text;
+  late String text;
   TextItem({Key? key,required this.text}) : super(key: key);
 
   @override

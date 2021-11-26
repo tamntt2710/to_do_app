@@ -81,12 +81,14 @@ class MyHomePage extends StatelessWidget {
         decoration: BoxDecoration(
             color: Colors.white
         ),
-        child: Column(
-          children: [
-            SearchItem(),
-            SortTime(),
-            tabs[select],
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SearchItem(),
+              SortTime(),
+              tabs[select],
+            ],
+          ),
         ),
       ),
       floatingActionButton:  FloatingActionButton.extended(

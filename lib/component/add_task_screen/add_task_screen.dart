@@ -9,6 +9,7 @@ import 'package:to_do_app/model/colors.dart';
 import 'package:to_do_app/model/level_of_event.dart';
 import 'package:to_do_app/model/place.dart';
 import 'package:to_do_app/model/task.dart';
+import '../../utils.dart';
 import '../app_bar_custom.dart';
 import '../list_sort_button.dart';
 import 'color_item.dart';
@@ -18,9 +19,11 @@ class AddTaskWidget extends StatefulWidget {
   _AddTaskWidgetState createState() => _AddTaskWidgetState();
 }
 class _AddTaskWidgetState extends State<AddTaskWidget> {
-  Task task = Task(day: '27/10/2021',
-    name: 'Happy birthday',
-    place: 'Home', level: 'Important', color: Color(0xFFFFA3C2),);
+  Task task = Task(day: '',
+    name: '',
+    place: '',
+    level: '',
+    color: Color(0xFFFFA3C2),);
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -109,24 +112,36 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
           );
         }
     );
-    _timePicker.chooseDate(picked!);
+    setState((){
+      _timePicker.chooseDate(picked!);
+      task.day = _timePicker.dateSelect.toString();
+    });
   }
 
-  Widget buildTitle() => TextField(
+  Widget buildTitle() => Form(
     key: _formKey,
-    maxLines: 1,
-    style: inputText,
-    decoration: InputDecoration(
-      border: UnderlineInputBorder(
-          borderSide: new BorderSide(
-              color: Color(0xFFEAEAEA)
-          )
+    child: TextFormField(
+      initialValue: task.name,
+      validator: (value){
+        if (value == '') {
+          return 'Please enter some text';
+        }
+        return null;
+      },
+      maxLines: 1,
+      style: inputText,
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(
+            borderSide: new BorderSide(
+                color: Color(0xFFEAEAEA)
+            )
+        ),
+        hintText: 'Enter your task name',
+
       ),
-      hintText: 'Enter your task name',
+      onChanged: onChangedTitle,
 
     ),
-    onChanged: onChangedTitle,
-
   );
 
   Widget buildButton(context) => Container(
@@ -165,10 +180,13 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
             selected:  Provider.of<BackGroundColor>(context,
                 listen:false).selectedColor == index ? true:false,
             press: () {
-              Provider.of<BackGroundColor>(context,
-                  listen:false).chooseColor(index);
-              task.color = Provider.of<BackGroundColor>(context,
-                  listen:false).itemColor;
+              setState((){
+                Provider.of<BackGroundColor>(context,
+                    listen:false).chooseColor(index);
+                task.color = Provider.of<BackGroundColor>(context,
+                    listen:false).itemColor;
+              });
+
             },
           );
         },
@@ -182,20 +200,21 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-            Provider.of<DatePickerDState>(context)
-                .dateSelect.toString(),
-            style: textTime
+            task.day,
+          style: textTime,
         ),
         GestureDetector(
           onTap: (){
-            Provider.of<DatePickerDState>(context,
-                listen:false).chooseDate(Provider.of<DatePickerDState>(context,
-                listen:false).selectedDate);
-            _selectDate(context);
-            task.day = Provider.of<DatePickerDState>(context,listen: false)
-                .dateSelect
-                .toString();
-            print(task.day.toString());
+            setState((){
+              // Provider.of<DatePickerDState>(context,
+              //     listen:false).chooseDate(Provider.of<DatePickerDState>(context,
+              //     listen:false).selectedDate);
+              _selectDate(context);
+              task.day = Provider.of<DatePickerDState>(context,listen: false)
+                  .dateSelect
+                  .toString();
+              print(task.day.toString());
+            });
           },
           child: Icon(Icons.fact_check_outlined,color: Colors
               .black,),
@@ -252,9 +271,15 @@ class _AddTaskWidgetState extends State<AddTaskWidget> {
   );
 
   void addTask() {
-    Provider.of<TodosProvider>(context, listen: false).addTodo(task);
-    Navigator.of(context).pop();
-    print(task.toString());
+    final isValid = _formKey.currentState?.validate();
+    if(isValid! && task.place != '' && task.level != '' && task.day != ''){
+      Provider.of<TodosProvider>(context, listen: false).addTodo(task);
+      Navigator.of(context).pop();
+      print(task.name + task.place + task.place + task.day + task.level + task
+          .hour + task.isDOne.toString());
+    }else {
+      return;
+    }
   }
   void onChangedTitle(String value) => setState(() =>task.name = value);
 }
